@@ -3,9 +3,12 @@ package com.devwilly.tutorial.viewdraghelperex.ui;
 import android.content.Context;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.widget.ViewDragHelper;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -18,6 +21,7 @@ public class ViewDragLayout extends ViewGroup {
 
     private View mFirstView, mSecondView;
     private ViewDragHelper mViewDragHelper;
+    private GestureDetectorCompat mGestureDetectorCompat;
     private int mFirstHeight;
 
     public ViewDragLayout(Context context) {
@@ -43,6 +47,7 @@ public class ViewDragLayout extends ViewGroup {
 
     private void init() {
         mViewDragHelper = ViewDragHelper.create(this, 1.0f, new DragHelperCallback());
+        mGestureDetectorCompat = new GestureDetectorCompat(getContext(), new YScrollDetector());
     }
 
     @Override
@@ -82,6 +87,14 @@ public class ViewDragLayout extends ViewGroup {
         @Override
         public boolean tryCaptureView(View child, int pointerId) {
             return true;
+        }
+    }
+
+    private class YScrollDetector extends GestureDetector.SimpleOnGestureListener {
+
+        @Override
+        public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+            return Math.abs(distanceY) > Math.abs(distanceX);
         }
     }
 }
