@@ -107,6 +107,19 @@ public class ViewDragLayout extends ViewGroup {
         return yScroll && shouldIntercept;
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+
+        // ViewDragHelper.callback achieve drag effect
+        // https://github.com/umano/AndroidSlidingUpPanel/issues/351
+        try {
+            mViewDragHelper.processTouchEvent(event);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return true;
+    }
+
     private class YScrollDetector extends GestureDetector.SimpleOnGestureListener {
 
         @Override
