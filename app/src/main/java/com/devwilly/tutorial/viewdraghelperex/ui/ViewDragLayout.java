@@ -90,6 +90,23 @@ public class ViewDragLayout extends ViewGroup {
         }
     }
 
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+
+        // if "first view" and "second view" are transformed, don't deal with touch event.
+        if (mFirstView.getTop() < 0 && mFirstView.getBottom() > 0) {
+            return false;
+        }
+
+        boolean yScroll = mGestureDetectorCompat.onTouchEvent(ev);
+        boolean shouldIntercept = mViewDragHelper.shouldInterceptTouchEvent(ev);
+
+        if (ev.getActionMasked() == MotionEvent.ACTION_DOWN) {
+            mViewDragHelper.processTouchEvent(ev);
+        }
+        return yScroll && shouldIntercept;
+    }
+
     private class YScrollDetector extends GestureDetector.SimpleOnGestureListener {
 
         @Override
