@@ -5,6 +5,7 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v4.widget.ViewDragHelper;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -16,23 +17,32 @@ import android.view.ViewGroup;
 public class ViewDragLayout extends ViewGroup {
 
     private View mFirstView, mSecondView;
+    private ViewDragHelper mViewDragHelper;
     private int mFirstHeight;
 
     public ViewDragLayout(Context context) {
         super(context);
+        init();
     }
 
     public ViewDragLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
+        init();
     }
 
     public ViewDragLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        init();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public ViewDragLayout(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
+        init();
+    }
+
+    private void init() {
+        mViewDragHelper = ViewDragHelper.create(this, 1.0f, new DragHelperCallback());
     }
 
     @Override
@@ -65,5 +75,13 @@ public class ViewDragLayout extends ViewGroup {
         setMeasuredDimension(
                 resolveSizeAndState(maxWidth, widthMeasureSpec, 0),
                 resolveSizeAndState(maxHeight, heightMeasureSpec, 0));
+    }
+
+    private class DragHelperCallback extends ViewDragHelper.Callback {
+
+        @Override
+        public boolean tryCaptureView(View child, int pointerId) {
+            return true;
+        }
     }
 }
