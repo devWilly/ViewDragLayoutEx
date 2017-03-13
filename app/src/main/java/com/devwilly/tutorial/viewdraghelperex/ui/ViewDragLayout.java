@@ -20,8 +20,8 @@ import android.view.ViewGroup;
 
 public class ViewDragLayout extends ViewGroup {
 
-    private static final int VEL_THRESHOLD = 100;
-    private static final int DISTANCE_THRESHOLD = 100;
+    private static final int VEL_THRESHOLD = 500;
+    private static final int DISTANCE_THRESHOLD = 500;
     private View mFirstView, mSecondView;
     private ViewDragHelper mViewDragHelper;
     private GestureDetectorCompat mGestureDetectorCompat;
@@ -118,6 +118,36 @@ public class ViewDragLayout extends ViewGroup {
             }
 
             ViewCompat.postInvalidateOnAnimation(ViewDragLayout.this);
+        }
+
+        @Override
+        public void onViewReleased(View releasedChild, float xvel, float yvel) {
+            animTopOrBottom(releasedChild, yvel);
+        }
+    }
+
+    @Override
+    public void computeScroll() {
+        if (mViewDragHelper.continueSettling(true)) {
+            ViewCompat.postInvalidateOnAnimation(this);
+        }
+    }
+
+    private void animTopOrBottom(View releasedChild, float yvel) {
+        int finalTop = 0;
+
+        if (releasedChild == mFirstView) {
+            if (yvel < -VEL_THRESHOLD || (releasedChild.getTop() < -DISTANCE_THRESHOLD)) {
+                finalTop = -mFirstHeight;
+            }
+        } else if (releasedChild == mSecondView) {
+            if (yvel > VEL_THRESHOLD || (releasedChild.getTop() > DISTANCE_THRESHOLD)) {
+                finalTop = mFirstHeight;
+            }
+        }
+
+        if (mViewDragHelper.smoothSlideViewTo(releasedChild, 0, finalTop)) {
+            ViewCompat.postInvalidateOnAnimation(this);
         }
     }
 
