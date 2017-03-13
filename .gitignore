@@ -1,0 +1,36 @@
+bin/
+gen/
+.settings/
+local.properties
+.version
+.DS_Store
+proguard/
+build
+.idea/
+ 
+# maven output folder
+target
+
+# built application files
+*.apk
+*.ap_
+
+# lint folder
+lint
+ 
+# IntelliJ files
+.idea
+*.iml
+  
+# Windows files
+Thumbs.db
+ 
+# vi swap files
+*.swp
+
+# gradle directory
+.gradle
+build/
+
+# android stdio memory dump files
+captures/
