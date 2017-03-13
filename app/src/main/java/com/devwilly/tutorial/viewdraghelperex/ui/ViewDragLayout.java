@@ -20,6 +20,8 @@ import android.view.ViewGroup;
 
 public class ViewDragLayout extends ViewGroup {
 
+    private static final int VEL_THRESHOLD = 100;
+    private static final int DISTANCE_THRESHOLD = 100;
     private View mFirstView, mSecondView;
     private ViewDragHelper mViewDragHelper;
     private GestureDetectorCompat mGestureDetectorCompat;
