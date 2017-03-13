@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v4.view.GestureDetectorCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.ViewDragHelper;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -104,6 +105,17 @@ public class ViewDragLayout extends ViewGroup {
             }
 
             return finalTop;
+        }
+
+        @Override
+        public void onViewPositionChanged(View changedView, int left, int top, int dx, int dy) {
+            if (changedView == mFirstView) {
+                mSecondView.offsetTopAndBottom(dy);
+            } else if (changedView == mSecondView) {
+                mFirstView.offsetTopAndBottom(dy);
+            }
+
+            ViewCompat.postInvalidateOnAnimation(ViewDragLayout.this);
         }
     }
 
