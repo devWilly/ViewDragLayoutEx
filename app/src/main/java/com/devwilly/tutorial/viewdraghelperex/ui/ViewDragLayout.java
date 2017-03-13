@@ -88,6 +88,23 @@ public class ViewDragLayout extends ViewGroup {
         public boolean tryCaptureView(View child, int pointerId) {
             return true;
         }
+
+        @Override
+        public int clampViewPositionVertical(View child, int top, int dy) {
+            int finalTop = top;
+
+            if (child == mFirstView) {
+                if (top > 0) {
+                    finalTop = 0;
+                }
+            } else if (child == mSecondView) {
+                if (top < 0) {
+                    finalTop = 0;
+                }
+            }
+
+            return finalTop;
+        }
     }
 
     @Override
